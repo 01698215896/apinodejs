@@ -47,6 +47,21 @@ app.put("/users/:id", async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 });
+app.delete("/users/:id", async (req, res) => {
+    try {
+      const { id } = req.params;
+      const User = await user.findByIdAndDelete(id, req.body);
+      if(!User) {
+          return res.status(404).json({ message: `khong tim thay ${id}` });
+      }
+  
+      const updateuser = await User.findById(id);
+      res.status(200).json(updateuser);
+    } catch (err) {
+      console.log(err.message);
+      res.status(500).json({ message: err.message });
+    }
+  });
 
 app.post("/users", async (req, res) => {
   try {
